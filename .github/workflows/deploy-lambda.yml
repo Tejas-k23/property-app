@@ -1,10 +1,12 @@
-name: Deploy Lambda (single file)
+name: Deploy Lambda
 
 on:
   push:
     branches: ["main"]
     paths:
       - "index.js"
+      - "package.json"
+      - "package-lock.json"
       - ".github/workflows/deploy-lambda.yml"
 
 permissions:
@@ -25,9 +27,17 @@ jobs:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Create ZIP (root index.js)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci --omit=dev
+
+      - name: Create ZIP (code + node_modules)
         run: |
-          zip -r lambda.zip index.js
+          zip -r lambda.zip index.js node_modules package.json package-lock.json
 
       - name: Deploy to AWS Lambda
         run: |

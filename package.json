@@ -1,0 +1,25 @@
+{
+  "name": "createpropertyfunction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tejas-k23/property-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Tejas-k23/property-app/issues"
+  },
+  "homepage": "https://github.com/Tejas-k23/property-app#readme",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.993.0",
+    "@aws-sdk/lib-dynamodb": "^3.993.0"
+  }
+}
