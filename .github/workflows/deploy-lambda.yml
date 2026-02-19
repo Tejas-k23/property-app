@@ -1,0 +1,37 @@
+name: Deploy Lambda (single file)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "lambdas/createPropertyFunction/**"
+      - ".github/workflows/deploy-lambda.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Create ZIP (single file)
+        run: |
+          cd lambdas/createPropertyFunction
+          zip -r ../../lambda.zip index.js
+
+      - name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ vars.LAMBDA_FUNCTION_NAME }}" \
+            --zip-file "fileb://lambda.zip"
