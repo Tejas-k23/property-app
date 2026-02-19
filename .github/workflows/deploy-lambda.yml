@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "lambdas/createPropertyFunction/**"
+      - "index.js"
       - ".github/workflows/deploy-lambda.yml"
 
 permissions:
@@ -25,10 +25,9 @@ jobs:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Create ZIP (single file)
+      - name: Create ZIP (root index.js)
         run: |
-          cd lambdas/createPropertyFunction
-          zip -r ../../lambda.zip index.js
+          zip -r lambda.zip index.js
 
       - name: Deploy to AWS Lambda
         run: |
